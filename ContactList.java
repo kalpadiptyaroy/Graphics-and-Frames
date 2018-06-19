@@ -4,10 +4,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JSeparator;
 import javax.swing.JScrollPane;
 import javax.swing.DefaultListModel;
+import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 import java.awt.Color;
 import java.awt.GridBagLayout;
 import java.awt.BorderLayout;
@@ -21,12 +25,15 @@ import java.util.StringTokenizer;
 class ContactList
 {
     JFrame window;   JPanel panel;   JList list;
+    
+    JLabel name, mobileNo, email, addr;
+    
     public ContactList()
     {
         window = new JFrame("Contacts");
         window.setVisible(true);
         window.setSize(400, 400);
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
         
         panel = new JPanel(new GridBagLayout());        
     }
@@ -50,6 +57,8 @@ class ContactList
         br.close();     fr.close();
         
         list = new JList(lt);
+        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        list.setVisibleRowCount(10);
         list.setSize(400, 400);
     }
     
@@ -64,19 +73,46 @@ class ContactList
     }
     public void showWindow()
     {
-        JLabel msg = new JLabel("Contact List");
+        JLabel msg1 = new JLabel("Contact List");
+        JLabel msg2 = new JLabel("Contact Details");
         
-        GridBagConstraints c = new GridBagConstraints();
+        JSeparator sep = new JSeparator();
+        sep.setOrientation(SwingConstants.VERTICAL);
+        sep.setVisible(true);
+        
+        GridBagConstraints c = new GridBagConstraints(); 
         c.insets = new Insets(10, 10, 10, 10);
         
-        c.gridx = 0;    c.gridy = 0;
-        panel.add(msg, c);
+        c.gridx = 0;    c.gridy = 0;    panel.add(msg1, c);
+        c.gridx = 1;    c.gridy = 0;    panel.add(sep);
+        c.gridx = 2;    c.gridy = 0;    panel.add(msg2, c);
         
-        c.gridx = 0;    c.gridy = -8;
         JScrollPane jsp = new JScrollPane(list);
-        panel.add(jsp);
+        c.gridx = 0;    c.gridy = -1;    panel.add(jsp, c);
         
-        window.add(panel);
+        window.getContentPane().add(panel);
+    }    
+    
+    public void viewDetails(int x)throws IOException
+    {
+        FileReader fr = new FileReader("ContactRegister.txt");
+        BufferedReader br = new BufferedReader(fr);
+        
+        int k = 0;  String s = "";
+        
+        while((s = br.readLine()) != null)
+        {
+            
+        }
+        
+    }
+    
+    class HandlerClass implements ListSelectionListener
+    {
+        public void valueChanged(ListSelectionEvent e)
+        {
+            
+        }
     }
     
     public void callAllMethods()throws IOException
