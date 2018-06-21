@@ -26,15 +26,18 @@ class ContactList
     JFrame window;   JPanel panel, detPanel;   JList list; 
 
     JLabel name, mobileNo, email, addr;
+    
+    JLabel text[] = new JLabel[6];
 
     public ContactList()
     {
         window = new JFrame("Contacts");
         window.setVisible(true);
-        window.setSize(550, 550);
+        window.setSize(600, 580);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
 
         panel = new JPanel(new GridBagLayout());        
+        detPanel = new JPanel(new GridBagLayout());
     }
 
     public void getContacts()throws IOException
@@ -89,65 +92,91 @@ class ContactList
 
         JScrollPane jsp = new JScrollPane(list);
         c.weighty = -6;
-        c.gridx = 0;    c.gridy = -1;    panel.add(jsp, c);
-
+        c.gridx = 0;    c.gridy = -1;    panel.add(jsp, c);             
+        
+        
         window.getContentPane().add(panel);
-
-                                                //Adding Selection Listener.
+        
+        c = new GridBagConstraints();
+        c.gridx = 1;    c.gridy = -1;
+        panel.add(detPanel, c); 
+        
+        addLabels();
+        
+        //Adding Selection Listener.
         HandlerClass h = new HandlerClass();
         list.addListSelectionListener(h);
     }      
 
+    
+    public void addLabels()
+    {
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(10, 10, 10, 10);
+        c.anchor = GridBagConstraints.LINE_START;
+        c.gridx = 2;    c.gridy = -1;         
+
+        text[0] = new JLabel();  
+        c.weighty = -1;
+        detPanel.add(text[0], c);      c.gridy--;
+
+        
+        text[1] = new JLabel();
+        detPanel.add(text[1], c);      c.gridy--;
+
+        
+        text[2] = new JLabel();
+        detPanel.add(text[2], c);      c.gridy--;
+
+        
+        text[3] = new JLabel();
+        detPanel.add(text[3], c);      c.gridy--;
+
+        
+        text[4] = new JLabel();
+        detPanel.add(text[4], c);      c.gridy--;
+
+        
+        text[5] = new JLabel();
+        detPanel.add(text[5], c);    
+       
+        c = new GridBagConstraints();
+        c.gridx = 1;    c.gridy = -1;
+        panel.add(detPanel, c);    
+    }
     public void viewDetails(String x)throws IOException
     {
         FileReader fr = new FileReader("ContactRegister.txt");
         BufferedReader br = new BufferedReader(fr);
-
-        int k = 0;  String s = "";
-
-        GridBagConstraints c = new GridBagConstraints();
-        c.insets = new Insets(10, 10, 10, 10);
-        c.anchor = GridBagConstraints.LINE_START;
-        c.gridx = 2;    c.gridy = -1;   
-
+        
+        int k = 0;  String s = "";      
+        
+        
         do
         { 
             s = br.readLine();
             StringTokenizer st = new StringTokenizer(s, "\t");
             String p = st.nextToken() + "  " + removeHash(st.nextToken()) + "  " + st.nextToken();
-            
+
             if(x.trim().equals(p) == true)
             {               
-                detPanel = new JPanel(new GridBagLayout());
+                text[0].setText("Name : " + p);
                 
-                JLabel text = new JLabel(" Name : " + p);  
-                c.weighty = -1;
-                detPanel.add(text, c);      c.gridy--;
-
                 p = st.nextToken();
-                text = new JLabel(" Email : " + p);
-                detPanel.add(text, c);      c.gridy--;
-
+                text[1].setText("Email : " + p);
+                
                 p = st.nextToken();
-                text = new JLabel(" Mobile : " + p);
-                detPanel.add(text, c);      c.gridy--;
-
+                text[2].setText("Mobile : " + p);
+                
                 p = st.nextToken();
-                text = new JLabel(" Landline : " + p);
-                detPanel.add(text, c);      c.gridy--;
-
+                text[3].setText("Landline : " + p);
+                
                 p = st.nextToken();
-                text = new JLabel(" Notes : " + p);
-                detPanel.add(text, c);      c.gridy--;
-
+                text[4].setText("Notes : " + p);
+                
                 p = st.nextToken()+ "  " + st.nextToken() + "  " + st.nextToken();
-                text = new JLabel(" Address : " + p);
-                detPanel.add(text, c);     
+                text[5].setText("Address : " + p);
                 
-                c = new GridBagConstraints();
-                c.gridx = 1;    c.gridy = -1;
-                detPanel.revalidate();
-                panel.add(detPanel, c);
                 s = null;                  
             }
         }
