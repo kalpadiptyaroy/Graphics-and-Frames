@@ -91,7 +91,7 @@ class NewContact
             if(f[i].getText().equals("") == true)
                 pw.print("#" + "\t");
             else
-                pw.print(f[i].getText() + "\t");
+                pw.print(f[i].getText().trim() + "\t");
         }
         pw.println();
 
