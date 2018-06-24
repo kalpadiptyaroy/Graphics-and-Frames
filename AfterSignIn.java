@@ -10,9 +10,7 @@ import java.awt.Insets;
 
 class AfterSignIn
 {
-    JFrame window;
-    JPanel panel;
-    JButton contactlist, addcontact;
+    JFrame window;    JPanel panel, btnPanel;    JButton contactlist, addcontact;
     public AfterSignIn()
     {
         window = new JFrame("Welcome User");
@@ -24,37 +22,32 @@ class AfterSignIn
     public void showWindow()
     {
         panel = new JPanel(new GridBagLayout());
+        btnPanel = new JPanel(new GridBagLayout());
+        
         JLabel msg1 = new JLabel("Welcome Dear User!");
         JLabel msg2 = new JLabel("Please Select one of the Actions Below");
+        
         contactlist = new JButton("View Contacts");
         addcontact = new JButton("Add Contact");
 
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(5, 5, 5, 5);
 
-        c.gridx = 0;
-        c.gridy = 0;
-        panel.add(msg1, c);
-
-        c.gridx = 0;
-        c.gridy = -1;
-        panel.add(msg2, c);
-
+        c.gridx = 0;        c.gridy = 0;        panel.add(msg1, c);
+        c.gridx = 0;        c.gridy = -1;       panel.add(msg2, c);
+        
+        c.gridy = -2;   panel.add(btnPanel, c);
+        
         c = new GridBagConstraints();
         c.insets = new Insets(5, 5, 5, 5);
 
-        c.gridx = 0;
-        c.gridy = -2;
-        panel.add(contactlist, c);
-
-        c.gridx = 0;
-        c.gridy = -4;        
-        panel.add(addcontact, c);
+        c.gridx = 0;        c.gridy = -2;       btnPanel.add(contactlist, c);
+        c.gridx = 1;        c.gridy = -2;       btnPanel.add(addcontact, c);
 
         window.add(panel);
     }
 
-    public void handle()
+    public void handleEvents()
     {
         HandlerClass h = new HandlerClass();
         contactlist.addActionListener(h);
@@ -90,14 +83,12 @@ class AfterSignIn
     }
     public void callAllMethods()
     {
-        showWindow();
-        handle();
+        showWindow();       handleEvents();
     }
 
     public static void main()
     {
         AfterSignIn ob = new AfterSignIn();
-        ob.showWindow();
-        ob.handle();
+        ob.showWindow();       ob.handleEvents();
     }
 }
