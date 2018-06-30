@@ -25,9 +25,9 @@ import java.util.StringTokenizer;
 
 class ContactList 
 {
-    JFrame window;    JPanel panel, detPanel, btnPanel;    JList list;
-    JButton delButton, editButton;    JLabel text[] = new JLabel[6];
-    String n, contactLine;
+    JFrame window;      JList list;     String n, contactLine;    
+    JPanel panel, detPanel, btnPanel;   JButton delButton, editButton;    
+    JLabel text[] = new JLabel[6];    
 
     public ContactList() 
     {
@@ -50,11 +50,14 @@ class ContactList
 
         String s = "";
 
-        while ((s = br.readLine()) != null) {
+        while ((s = br.readLine()) != null) 
+        {
             StringTokenizer st = new StringTokenizer(s, "\t");
+            
             int idn = Integer.parseInt(st.nextToken());
             String fullname = "   " + st.nextToken().trim() + " " + st.nextToken().trim() + " " + st.nextToken().trim()
                 + "   ";
+            
             lt.addElement(removeHash(fullname));
         }
 
@@ -97,12 +100,12 @@ class ContactList
         c = new GridBagConstraints();
         c.gridx = 1;       c.gridy = -1;     panel.add(detPanel, c);
 
-        addLabelsAndButtons(); // Note Here is a Function Call.
-        handleEvents(); // Note Here is a Function Call.
+        addLabelsAndButtons();              // Note Here is a Function Call.
+        handleEvents();                     // Note Here is a Function Call.
     }
     public void handleEvents()
     {
-        // Adding Selection Listener.
+        // Adding Listeners.
         SelectionHandlerClass h = new SelectionHandlerClass();
         list.addListSelectionListener(h);
 
@@ -120,12 +123,14 @@ class ContactList
         c.gridx = 2;     c.gridy = -1;
 
         int k = 0;
+        
         do 
         {
             text[k] = new JLabel();
             detPanel.add(text[k++], c);
             c.gridy--;
-        } while (k < 6);
+        }
+        while (k < 6);
 
         detPanel.add(btnPanel, c);
 
@@ -177,13 +182,14 @@ class ContactList
             }
         } 
         while (s != null);
+        
         br.close();    fr.close();
     }
     public void callAllMethods() throws IOException 
     {
         getContacts();       showWindow();
     }
-    // Note Here is a Sub Class Defined!
+                                                                // Note Here is a Sub Class Defined!
     class SelectionHandlerClass implements ListSelectionListener 
     {
         public void valueChanged(ListSelectionEvent e) 
@@ -200,7 +206,7 @@ class ContactList
                 }
         }
     }
-    // Note Here is a Sub Class Defined!
+                                                                // Note Here is a Sub Class Defined!
     class DeletionHandlerClass implements ActionListener 
     {
         public void actionPerformed(ActionEvent e) 
@@ -222,7 +228,7 @@ class ContactList
             }
         }
     }
-
+                                                            //Note there is a sub-class defined!
     class EditionHandlerClass implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
