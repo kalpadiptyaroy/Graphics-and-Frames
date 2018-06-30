@@ -11,24 +11,25 @@ import java.awt.Insets;
 class AfterSignIn
 {
     JFrame window;    JPanel panel, btnPanel;    JButton contactlist, addcontact;
+    
     public AfterSignIn()
     {
         window = new JFrame("Welcome User");
         window.setVisible(true);
         window.setSize(400, 300);
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
-    }
-
-    public void showWindow()
-    {
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);       
+        
         panel = new JPanel(new GridBagLayout());
         btnPanel = new JPanel(new GridBagLayout());
         
-        JLabel msg1 = new JLabel("Welcome Dear User!");
-        JLabel msg2 = new JLabel("Please Select one of the Actions Below");
-        
         contactlist = new JButton("View Contacts");
         addcontact = new JButton("Add Contact");
+    }
+
+    public void showWindow()
+    {        
+        JLabel msg1 = new JLabel("Welcome Dear User!");
+        JLabel msg2 = new JLabel("Please Select one of the Actions Below");       
 
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(5, 5, 5, 5);
@@ -36,7 +37,7 @@ class AfterSignIn
         c.gridx = 0;        c.gridy = 0;        panel.add(msg1, c);
         c.gridx = 0;        c.gridy = -1;       panel.add(msg2, c);
         
-        c.gridy = -2;   panel.add(btnPanel, c);
+        c.gridy = -2;       panel.add(btnPanel, c);
         
         c = new GridBagConstraints();
         c.insets = new Insets(5, 5, 5, 5);
@@ -53,6 +54,7 @@ class AfterSignIn
         contactlist.addActionListener(h);
         addcontact.addActionListener(h);
     }
+                                                   //Note there is a sub-class Defined.
     class HandlerClass implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
