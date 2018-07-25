@@ -25,23 +25,25 @@ import java.util.StringTokenizer;
 
 class ContactList 
 {
-    JFrame window;      JList list;     String n, contactLine;    
-    JPanel panel, detPanel, btnPanel;   JButton delButton, editButton;    
-    JLabel text[] = new JLabel[6];    
+    JFrame window;    JPanel panel, listPanel, detPanel, btnPanel;    JList list;
+    JButton delButton, editButton;    JLabel text[] = new JLabel[6];
+    String n, contactLine;
 
     public ContactList() 
     {
         window = new JFrame("Contacts");
         window.setVisible(true);
-        window.setSize(600, 580);
+        window.setSize(670, 390);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         panel = new JPanel(new GridBagLayout());
         detPanel = new JPanel(new GridBagLayout());
         btnPanel = new JPanel(new GridBagLayout());
+        listPanel = new JPanel(new GridBagLayout());
 
         n = ""; contactLine = "";
     }
+
     public void getContacts() throws IOException 
     {
         FileReader fr = new FileReader("ContactRegister.txt");
@@ -50,14 +52,11 @@ class ContactList
 
         String s = "";
 
-        while ((s = br.readLine()) != null) 
-        {
+        while ((s = br.readLine()) != null) {
             StringTokenizer st = new StringTokenizer(s, "\t");
-            
             int idn = Integer.parseInt(st.nextToken());
             String fullname = "   " + st.nextToken().trim() + " " + st.nextToken().trim() + " " + st.nextToken().trim()
                 + "   ";
-            
             lt.addElement(removeHash(fullname));
         }
 
@@ -68,6 +67,7 @@ class ContactList
         list.setVisibleRowCount(13);
         list.setSize(400, 400);
     }
+
     public String removeHash(String x) 
     {
         for (int i = 0; i < x.length(); i++)         
@@ -75,37 +75,44 @@ class ContactList
                 return "   " + x.substring(0, i).trim() + " " + x.substring(i + 1).trim() + "   ";        
         return x;
     }
+
     public void showWindow() 
     {
         JLabel msg1 = new JLabel("Contact List");
         JLabel msg2 = new JLabel("Contact Details");
+        JScrollPane jsp = new JScrollPane(list);      
+        JPanel sepPanel = new JPanel(new GridBagLayout());        
 
         JSeparator sep = new JSeparator();
         sep.setOrientation(SwingConstants.VERTICAL);
         sep.setVisible(true);
-        sep.setPreferredSize(new Dimension(50, 1));
+        sep.setPreferredSize(new Dimension(1, 300));    
+        sepPanel.add(sep);    
 
         GridBagConstraints c = new GridBagConstraints();
-        c.insets = new Insets(10, 10, 10, 10);
+        c.insets = new Insets(10, 5, 5, 5);
+        c.gridheight = 9;
+        c.gridx = 0;       c.gridy = 0;       panel.add(listPanel, c);      c.gridheight = 10;
+        c.gridx = 1;       c.gridy = 0;       panel.add(sepPanel, c);
+        c.gridx = 2;       c.gridy = 0;       panel.add(detPanel, c);
 
-        c.gridx = 0;       c.gridy = 0;      panel.add(msg1, c);
-        c.gridx = 1;       c.gridy = 0;      panel.add(sep);
-        c.gridx = 1;       c.gridy = 0;      panel.add(msg2, c);
+        c = new GridBagConstraints();                c.insets = new Insets(10, 5, 5, 5);
+        c.gridx = 0;       c.gridy = 0;              listPanel.add(msg1, c);  
+        c.gridx = 0;       c.gridy = -1;             listPanel.add(jsp, c);  
+        c.anchor = GridBagConstraints.CENTER; 
+        c.insets = new Insets(1, 5, 5, 5);       
+        c.gridx = 0;       c.gridy = 0;              detPanel.add(msg2, c);
+        
 
-        JScrollPane jsp = new JScrollPane(list);
-        c.gridx = 0;       c.gridy = -1;     panel.add(jsp, c);
+        window.add(panel);
 
-        window.getContentPane().add(panel);
-
-        c = new GridBagConstraints();
-        c.gridx = 1;       c.gridy = -1;     panel.add(detPanel, c);
-
-        addLabelsAndButtons();              // Note Here is a Function Call.
-        handleEvents();                     // Note Here is a Function Call.
+        addLabelsAndButtons(); // Note Here is a Function Call.
+        handleEvents(); // Note Here is a Function Call.
     }
+
     public void handleEvents()
     {
-        // Adding Listeners.
+        // Adding Selection Listener.
         SelectionHandlerClass h = new SelectionHandlerClass();
         list.addListSelectionListener(h);
 
@@ -115,22 +122,20 @@ class ContactList
         EditionHandlerClass E = new EditionHandlerClass();
         editButton.addActionListener(E);
     }
+
     public void addLabelsAndButtons() 
     {
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(8, 9, 9, 9);
         c.anchor = GridBagConstraints.LINE_START;
-        c.gridx = 2;     c.gridy = -1;
+        c.gridx = 0;     c.gridy = -1;        int k = 0;
 
-        int k = 0;
-        
         do 
         {
             text[k] = new JLabel();
             detPanel.add(text[k++], c);
             c.gridy--;
-        }
-        while (k < 6);
+        } while (k < 6);
 
         detPanel.add(btnPanel, c);
 
@@ -140,15 +145,14 @@ class ContactList
         editButton.setVisible(false);
 
         c.gridy--;      btnPanel.add(delButton, c);
-        c.gridx++;      btnPanel.add(editButton, c);
-
-        c = new GridBagConstraints();
-        c.gridx = 1;     c.gridy = -1;      panel.add(detPanel, c);
+        c.gridx++;      btnPanel.add(editButton, c);        
     }
+
     public void viewDetails(String x)throws IOException 
     {
         FileReader fr = new FileReader("ContactRegister.txt");
         BufferedReader br = new BufferedReader(fr);
+
         delButton.setVisible(true);     editButton.setVisible(true);
 
         String s = "";
@@ -156,6 +160,7 @@ class ContactList
         {
             s = br.readLine();      contactLine = s;
             StringTokenizer st = new StringTokenizer(s, "\t");
+
             int idn = Integer.parseInt(st.nextToken());
             String p = removeHash(st.nextToken() + " " + st.nextToken() + " " + st.nextToken());           
 
@@ -182,14 +187,14 @@ class ContactList
             }
         } 
         while (s != null);
-        
         br.close();    fr.close();
     }
+
     public void callAllMethods() throws IOException 
     {
         getContacts();       showWindow();
     }
-                                                                // Note Here is a Sub Class Defined!
+    // Note Here is a Sub Class Defined!
     class SelectionHandlerClass implements ListSelectionListener 
     {
         public void valueChanged(ListSelectionEvent e) 
@@ -206,7 +211,7 @@ class ContactList
                 }
         }
     }
-                                                                // Note Here is a Sub Class Defined!
+    // Note Here is a Sub Class Defined!
     class DeletionHandlerClass implements ActionListener 
     {
         public void actionPerformed(ActionEvent e) 
@@ -228,7 +233,7 @@ class ContactList
             }
         }
     }
-                                                            //Note there is a sub-class defined!
+    // Note Here is a Sub Class Defined!
     class EditionHandlerClass implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
@@ -251,6 +256,6 @@ class ContactList
     public static void main(String args[]) throws IOException 
     {
         ContactList ob = new ContactList();
-        ob.getContacts();        ob.showWindow();
+        ob.getContacts();        ob.showWindow(); 
     }
 }
