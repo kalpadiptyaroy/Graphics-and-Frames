@@ -34,36 +34,35 @@ class SignInWindow
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(5, 5, 5, 5);
         
-        c.gridx = 0;    c.gridy = 0;    panel.add(name, c);
-        
-        c.gridx = 2;    c.gridy = 0;    panel.add(user_id, c);
-        
-        c.gridx = 0;    c.gridy = -1;   panel.add(passwd, c);
-        
-        c.gridx = 2;    c.gridy = -1;   panel.add(pass, c);     
-        
+        c.gridx = 0;    c.gridy = 0;    panel.add(name, c);        
+        c.gridx = 2;    c.gridy = 0;    panel.add(user_id, c);        
+        c.gridx = 0;    c.gridy = -1;   panel.add(passwd, c);        
+        c.gridx = 2;    c.gridy = -1;   panel.add(pass, c);        
         c.gridx = 2;    c.gridy = -3;   panel.add(SignIn, c);           
        
         window.add(panel);
     }
     public void signIn()
     {
-        HandlerClass h = new HandlerClass();        
+        HandlerClass h = new HandlerClass(); 
+        pass.addActionListener(h);
         SignIn.addActionListener(h);
     }
-    
+    public void callAllMethods()
+    {
+        showLogin();        signIn();
+    }
     public static void main()
     {
         SignInWindow ob = new SignInWindow();
-        ob.showLogin();
-        ob.signIn();
+        ob.showLogin();        ob.signIn();
     }
     
     class HandlerClass implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
         {
-            if(e.getSource() == SignIn)
+            if(e.getSource() == SignIn || e.getSource() == pass)
             {
                 if(user_id.getText().equals("") == true)
                 JOptionPane.showMessageDialog(null, "Please Enter User ID");
@@ -73,9 +72,10 @@ class SignInWindow
                 JOptionPane.showMessageDialog(null, "Wrong Password");
                 else
                 {
-                    window.dispose();     // dispose function programmatically closes the JFrame.
-                    
-                    JOptionPane.showMessageDialog(null, "Congratulation. You have Signed In");
+                    window.dispose();     // dispose function programmatically closes the JFrame.                    
+                    JOptionPane.showMessageDialog(null, "Congratulation. You have Signed In");                    
+                    AfterSignIn win  = new AfterSignIn();
+                    win.callAllMethods();
                 }
             }
         }
