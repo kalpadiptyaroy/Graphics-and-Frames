@@ -99,8 +99,15 @@ class EditContact
     {
         String p = x + "\t";
         for(int i = 0; i < f.length; i++)
-            p = p + f[i].getText() + "\t";
+            p = p + addHashToEmptyField(f[i].getText()) + "\t";
         return p;    
+    }
+    
+    public String addHashToEmptyField(String x)
+    {
+        if(x.equals("") == true)
+            return "#";
+        return x;
     }
 
     public void saveNewDetails()throws IOException
