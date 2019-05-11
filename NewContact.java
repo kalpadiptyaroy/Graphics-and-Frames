@@ -10,10 +10,13 @@ import java.awt.Insets;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.FileReader;
+import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.PrintWriter;
 import java.io.IOException;
+import java.util.StringTokenizer;
 
 class NewContact
 {
@@ -29,6 +32,9 @@ class NewContact
         f = new JTextField[11];
         save = new JButton("Save Contact");
         clear = new JButton("Clear");
+        
+        for(int i = 0;i < 11; i++)
+            f[i] = new JTextField(18);
     }
 
     public void showForm()
@@ -47,10 +53,7 @@ class NewContact
         label[7] = new JLabel(" Address");
         label[8] = new JLabel(" Pin-Code ");
         label[9] = new JLabel(" City");
-        label[10] = new JLabel(" State");
-
-        for(int i = 0;i < 11; i++)
-            f[i] = new JTextField(18);
+        label[10] = new JLabel(" State");        
 
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(5, 10, 5, 5);       
@@ -61,15 +64,11 @@ class NewContact
             c.gridx = 0;
             c.gridy = -i;   panel.add(label[i], c);
             c.gridx = 1;    panel.add(f[i], c);
-        }
-        
-        
+        }       
         
         c.gridy--;      panel.add(btnPanel, c);
         c.gridx = 0;    c.gridy = 0;      btnPanel.add(save, c);
-        c.gridx = 1;    c.gridy = 0;      btnPanel.add(clear, c);
-        
-       
+        c.gridx = 1;    c.gridy = 0;      btnPanel.add(clear, c);      
 
         window.getContentPane().add(panel);
     }
@@ -82,26 +81,42 @@ class NewContact
     }
     public boolean checkFields()
     {
-        for(int i = 0; i < 11; i++)
-        {
+        for(int i = 0; i < 11; i++)        
             if(isEmptyField(f[i]) == true && i != 1 )
-                return true;
-        }
+                return true;        
         return false;
     }
     public void saveData()throws IOException
     {
+        FileReader fr = new FileReader("ContactRegister.txt");
+        BufferedReader br = new BufferedReader(fr);
+        
+        String s = "", p = ""; 
+        while((s = br.readLine()) != null)
+        {
+            if(s.equals("") == false)
+            {
+                StringTokenizer st = new StringTokenizer(s, "\t");
+                p = st.nextToken();                
+            }            
+        }
+        
+        int idn = 0;        
+        if(p.equals("") == true)        
+            idn = 1;         
+        else       
+            idn = Integer.parseInt(p) + 1;        
+        
         FileWriter fw = new FileWriter("ContactRegister.txt", true);
         BufferedWriter bw = new BufferedWriter(fw);
-        PrintWriter pw = new PrintWriter(bw);
-
-        for(int i = 0; i < 11; i++)
-        {
+        PrintWriter pw = new PrintWriter(bw);        
+        
+        pw.print(idn + "\t");
+        for(int i = 0; i < 11; i++)        
             if(f[i].getText().equals("") == true)
                 pw.print("#" + "\t");
             else
-                pw.print(f[i].getText().trim() + "\t");
-        }
+                pw.print(f[i].getText().trim() + "\t");        
         pw.println();
 
         pw.close();        bw.close();        fw.close();
@@ -126,14 +141,14 @@ class NewContact
         {
             if(e.getSource() == save && checkFields() == false)
             {
-                try
-                {
-                    saveData();    
-                }
-                catch(Exception ex)
+                try 
+                {               
+                    saveData();   
+                }            
+                catch(Exception ex)                
                 {
                     System.out.println(ex.getMessage());
-                }
+                }                 
                 finally
                 {
                     window.dispose();
@@ -152,7 +167,7 @@ class NewContact
         }
     }
 
-    public static void main()
+    public static void main(String args[])
     {
         NewContact ob = new NewContact();
         ob.showForm();        ob.handle();
